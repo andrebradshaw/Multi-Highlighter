@@ -112,31 +112,8 @@ function keywords(){
   highlight(parseAsRegexArr(content));
 }
 
-function parseAsRegexArr(bool) {
-if(/\\|\[|\?|\.\+/.test(bool)){
-  return bool.split(/\s{0,}AND\s{0,}/).map(el=> new RegExp(el,'ig'));
-} else {
-    var rxReady = (s) => s ? s.replace(/"/g, '\\b').trim().replace(/\)/g, '').replace(/\(/g, '').replace(/\s+/g, '.{0,2}').replace(/\//g, '\\/').replace(/\+/g, '\\+').replace(/\s*\*\s*/g, '.{0,29}') : s;
-    var checkSimpleOR = (s)=> /\bor\b/i.test(s) && /\(/.test(s) === false && /\b\s+and\s\b/.test(s) === false;
-    var checkAndOrSimple = (s) => [/\bor\b/i,/\band\b/i].every(el=> el.test(s) && /\(/.test(s) === false);
+var parseAsRegexArr = (str)=> /\\|\[|\?|\.\+/.test(str) ? str.split(/\s{0,}\band\b\s{0,}/i).map(el=> el.replace(/\s{0,}\bor\b\s{0,}/ig, '|')).map(el=> new RegExp(el,'i')) : str.split(/\s{0,}\band\b\s{0,}/i).map(el=> el.replace(/\s{0,}\bor\b\s{0,}/ig, '|').replace(/"/g,'\\b').replace(/\(/g,'').replace(/\)/g,'')).map(el=> new RegExp(el,'i'));
 
-    if(checkAndOrSimple(bool)){
-      return bool.replace(/\s+OR\s+|\s*\|\s*/gi, '|').replace(/\//g, '\\/').replace(/"/g, '\\b').replace(/\s+/g, '.{0,2}').replace(/\s*\*\s*/g, '.{0,29}').split(/\band\b/).map(el=> new RegExp(el.trim(), 'i'));
-
-    } else if (checkSimpleOR(bool)) {
-      return [new RegExp(bool.replace(/\s+OR\s+|\s*\|\s*/gi, '|').replace(/\//g, '\\/').replace(/"/g, '\\b').replace(/\s+/g, '.{0,2}').replace(/\s*\*\s*/g, '.{0,29}'), 'i')];
-
-    } else {
-      var orx = "\\(.+?\\)|(\\(\\w+\\s{0,1}OR\\s|\\w+\\s{0,1}OR\\s)+((\\w+\s)+?|(\\w+)\\)+)+?";
-      var orMatch = bool ? bool.match(new RegExp(orx, 'g')) : [];
-      var orArr = orMatch ? orMatch.map(b=> rxReady(b.replace(/\s+OR\s+|\s*\|\s*/gi, '|')) ) : [];
-      var noOrs = bool ? bool.replace(new RegExp(orx, 'g'), '').split(/\s{0,}\bAND\b\s{0,}/i) : bool;
-      var ands = noOrs ? noOrs.map(a=> rxReady(a)) : [];
-      var xArr = ands.concat(orArr).filter(i=> i != '').map(x=> new RegExp(x, 'ig') );
-      return xArr;
-    }
-  }
-}
 
 function clearHighlightClass(){
   var highlighted = Array.from(cn(document,'highlight_search_res'));
