@@ -1,3 +1,13 @@
+// document.body.onkeydown = test;
+// var cont = [];
+// function test(e){
+//   cont.push(e.key);
+//   if( ['Shift','Control','F'].every(el=> cont.some(i=> i == el) ) ) {
+//     console.log('yes');
+//     cont = [];
+//   }
+// }
+
 var reg = (o, n) => o ? o[n] : '';
 var cn = (o, s) => o ? o.getElementsByClassName(s) : console.log(o);
 var tn = (o, s) => o ? o.getElementsByTagName(s) : console.log(o);
