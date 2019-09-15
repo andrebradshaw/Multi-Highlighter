@@ -9,7 +9,8 @@ var ele = (t) => document.createElement(t);
 var attr = (o, k, v) => o.setAttribute(k, v);
 var reChar = (s) => s.match(/&#.+?;/g) && s.match(/&#.+?;/g).length > 0 ? s.match(/&#.+?;/g).map(el=> [el,String.fromCharCode(/d+/.exec(el)[0])]).map(m=> s = s.replace(new RegExp(m[0], 'i'), m[1])).pop() : s;
 
-var keywords = parseAsRegexArr('HTML.+?website AND requirements[\\w\\W\\n]+determin');
+var userInput = prompt('test');
+var keywords = parseAsRegexArr(userInput);
 
 function parseAsRegexArr(bool) {
 if(/\\|\[|\?|\.\+/.test(bool)){
@@ -37,28 +38,30 @@ if(/\\|\[|\?|\.\+/.test(bool)){
     }
   }
 }
-// var booleanSearch = (bool, target) => parseAsRegexArr(bool).every(x=> x.test(target));
 
-
+function clearHighlightClass(){
+  var highlighted = Array.from(cn(document,'highlight_search_res'));
+  if(highlighted.length > 0) highlighted.forEach(el=> el.outerHTML = el.innerText);
+}
 
 function highlight(){
+  clearHighlightClass();
   var pages = Array.from(document.querySelectorAll('*')).filter(el=> el.innerHTML && /<[a-zA-Z].*?>/.test(el.innerHTML) === false); 
 /*dives into all elements and returns the lowest level elm by omitting anything with an HTML tag. This will cause problems with poorly written HTML, and text content which is representing HTML data, but fuck it because what a simple solution this is. */
-  console.log(pages);
   for(var p=0; p<pages.length; p++){
     var page = pages[p].innerHTML;
     for(var i=0; i<keywords.length; i++){
       var rxg = keywords[i];
       var matches = page.match(rxg) ? page.match(rxg) : [];
       for(var m=0; m<matches.length; m++){
-        page = page.replace(matches[m], `<i class="highlight_search_res" style="background: hsl(${((i+1)*15)}, 100%, 50%); color: #fff; border: 1px solid hsl(${((i+1)*15)}, 100%, 45%); border-radius: 0.25em;">${matches[m]}</i>`);
+        var colorSwitch = (((i+1) * 15) > 39 && (i+1 * 15) < 100) || (((i+1) * 15) > 169 && (i+1 * 15) < 190) ? '#000' : '#fff';
+        page = page.replace(matches[m], `<i class="highlight_search_res" style="background: hsl(${((i+1)*15)}, 100%, 50%); color: ${colorSwitch}; border: 1px solid hsl(${((i+1)*15)}, 100%, 45%); border-radius: 0.25em;">${matches[m]}</i>`);
       }
     }
     pages[p].innerHTML = page;
   }
-var search_results_fields = Array.from(cn(document,'highlight_search_res'));
-search_results_fields[0].scrollIntoView({behavior: "smooth", block: "center", inline: "center"})
+  var search_results_fields = Array.from(cn(document,'highlight_search_res'));
+  if(search_results_fields && search_results_fields[0]) search_results_fields[0].scrollIntoView({behavior: "smooth", block: "center", inline: "center"})
 }
 
 highlight()
-
