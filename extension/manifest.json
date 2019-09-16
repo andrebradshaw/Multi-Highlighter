@@ -1,0 +1,14 @@
+{
+    "manifest_version": 2,
+    "name": "xHighlighter",
+    "version": "0.111",
+    "description" : "Find and highlight words with boolean search and regular expressions",
+    "content_scripts": [{
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }],
+    "permissions": ["storage"],
+    "icons": { "16": "16.png",
+               "48": "48.png",
+              "128": "128.png" }
+  }
