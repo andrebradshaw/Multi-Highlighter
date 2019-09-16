@@ -134,6 +134,12 @@ function dragElement() {
   }
 }
 
+
+function nextKeyword(){
+  var keyElms = Array.from(cn(document,'highlight_search_res')).map(el=> el.innerText);
+  var index = this.getAttribute('currentKey') == 'focus';
+  // if
+}
 async function createUserInputHTML(){  
 /*used when we first open the HTML*/
   var storage = await getMainKeyData();
@@ -142,21 +148,26 @@ if(gi(document,'keyword_box_input')) gi(document,'keyword_box_input').outerHTML 
 
   var cont = ele('div');
   attr(cont,'id','keyword_box_input');
-  attr(cont,'style',`position: fixed; width: ${Math.round(document.body.getBoundingClientRect().width)*.33}px; top: 1px; left: 1px; z-index: 13300;`);
+  attr(cont,'style',`position: fixed; display: grid; grid-template-columns: 81% 19%; background: #09274f; border: 1.3px solid #020a14; border-radius: 0.3em; width: ${Math.round(document.body.getBoundingClientRect().width)*.39}px; top: 1px; left: 1px; z-index: 13300;`);
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head, 'style', `display: grid; grid-template-columns: 91% 9%; height: 38px; background: #09274f; border: 1.3px solid #020a14; border-top-left-radius: 0.3em; border-top-right-radius: 0.3em; cursor: move; padding: 6px;`);
+  attr(head, 'style', `grid-area: 1 / 2; display: grid; grid-template-columns: 33% 33% 33%; grid-gap: 1%; cursor: move; padding: 6px;`);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
-  var htxt = ele('div');
-  attr(htxt, 'style', `grid-area: 1 / 1; color: #fff;`);
-  head.appendChild(htxt);
-  htxt.innerText = 'Highlight These Words';
+  // var ptxt = ele('div');
+  // attr(ptxt, 'style', `grid-area: 1 / 1; color: #fff; cursor: pointer;`);
+  // head.appendChild(ptxt);
+  // ptxt.innerText = '<';
+
+  // var ntxt = ele('div');
+  // attr(ntxt, 'style', `grid-area: 1 / 2; color: #fff; cursor: pointer;`);
+  // head.appendChild(ntxt);
+  // ntxt.innerText = '>';
 
   var cls = ele('div');
-  attr(cls, 'style', `grid-area: 1 / 2; width: 30px; height: 30px; cursor: pointer;`);
+  attr(cls, 'style', `grid-area: 1 / 3; width: 38px; height: 38px; cursor: pointer;`);
   head.appendChild(cls);
   cls.innerHTML = `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`;
   cls.onmouseenter = aninCloseBtn;
@@ -164,7 +175,7 @@ if(gi(document,'keyword_box_input')) gi(document,'keyword_box_input').outerHTML 
   cls.onclick = closeView;
 
   var cbod = ele('div');
-  attr(cbod, 'style', `display: grid; grid-template-rows; grid-gap: 10px; border: 1.3px solid #020a14; border-bottom-left-radius: 0.3em; border-bottom-right-radius: 0.3em; background: #fff; padding: 12px;`);
+  attr(cbod, 'style', `display: grid; grid-template-rows; grid-gap: 10px; padding: 12px;`);// border: 1.3px solid #020a14; border-radius: 0.3em; 
   cont.appendChild(cbod);
 
   var userInput = ele('input');
