@@ -97,7 +97,8 @@ function anoutCloseBtn() {
 }
 
 function closeView() {
-  this.parentElement.parentElement.outerHTML = '';
+  this.parentElement.parentElement.outerHTML = ''
+  clearHighlightClass();
 }
 
 function dragElement() {
@@ -134,6 +135,10 @@ function dragElement() {
   }
 }
 
+function clearHighlightClass(){
+  var highlighted = Array.from(cn(document,'highlight_search_res'));
+  if(highlighted.length > 0) highlighted.forEach(el=> el.outerHTML = el.innerText);
+}
 
 function nextKeyword(){
   var keyElms = Array.from(cn(document,'highlight_search_res')).map(el=> el.innerText);
@@ -148,11 +153,11 @@ if(gi(document,'keyword_box_input')) gi(document,'keyword_box_input').outerHTML 
 
   var cont = ele('div');
   attr(cont,'id','keyword_box_input');
-  attr(cont,'style',`position: fixed; display: grid; grid-template-columns: 81% 19%; background: #09274f; border: 1.3px solid #020a14; border-radius: 0.3em; width: ${Math.round(document.body.getBoundingClientRect().width)*.39}px; top: 1px; left: 1px; z-index: 13300;`);
+  attr(cont,'style',`position: fixed; display: grid; grid-template-columns: 86% 14%; background: #09274f; border: 1.3px solid #020a14; border-radius: 0.4em; width: ${Math.round(document.body.getBoundingClientRect().width)*.39}px; top: 1px; left: 1px; z-index: 13300;`);
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head, 'style', `grid-area: 1 / 2; display: grid; grid-template-columns: 33% 33% 33%; grid-gap: 1%; cursor: move; padding: 6px;`);
+  attr(head, 'style', `grid-area: 1 / 2; display: grid; grid-template-columns: 49%; 50%; grid-gap: 1%; cursor: move;`);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
@@ -167,7 +172,7 @@ if(gi(document,'keyword_box_input')) gi(document,'keyword_box_input').outerHTML 
   // ntxt.innerText = '>';
 
   var cls = ele('div');
-  attr(cls, 'style', `grid-area: 1 / 3; width: 38px; height: 38px; cursor: pointer;`);
+  attr(cls, 'style', `grid-area: 1 / 2; width: 44px; height: 44px; cursor: pointer;`);
   head.appendChild(cls);
   cls.innerHTML = `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`;
   cls.onmouseenter = aninCloseBtn;
@@ -202,27 +207,23 @@ var parseAsRegexArr = (str)=> /\\|\[|\?|\.\+/.test(str)
   ? str.split(/\s{0,}\band\b\s{0,}/i).map(el=> validX(el).replace(/\s{0,}\bor\b\s{0,}/ig, '|')).map(el=> new RegExp(el,'ig')) 
   : str.split(/\s{0,}\band\b\s{0,}/i).map(el=> validX(el).replace(/\s{0,}\bor\b\s{0,}/ig, '|').replace(/"/g,'\\b').replace(/\(/g,'').replace(/\)/g,'')).map(el=> new RegExp(el,'ig'));
 
-
-function clearHighlightClass(){
-  var highlighted = Array.from(cn(document,'highlight_search_res'));
-  if(highlighted.length > 0) highlighted.forEach(el=> el.outerHTML = el.innerText);
-}
-
 function highlight(keywords){
   clearHighlightClass();
   var pages = Array.from(document.querySelectorAll('*')).filter(el=> el.innerHTML && /<[a-zA-Z].*?>/.test(el.innerHTML) === false); 
 /*dives into all elements and returns the lowest level elm by omitting anything with an HTML tag. This will cause problems with poorly written HTML, and text content which is representing HTML data, but fuck it because what a simple solution this is. */
   for(var p=0; p<pages.length; p++){
     var page = pages[p].innerHTML;
+    
     for(var i=0; i<keywords.length; i++){
       var rxg = keywords[i];
       var matches = page && page.match(rxg) ? page.match(rxg) : [];
       for(var m=0; m<matches.length; m++){
         var colorSwitch = (((i+1) * 15) > 39 && (i+1 * 15) < 100) || (((i+1) * 15) > 169 && (i+1 * 15) < 190) ? '#000' : '#fff';
-        page = page.replace(matches[m], `<i class="highlight_search_res" style="background: hsl(${((i+1)*15)}, 100%, 50%); color: ${colorSwitch}; border: 1px solid hsl(${((i+1)*15)}, 100%, 45%); border-radius: 0.25em; box-shadow: 1px 1px #bababa; padding: 1px;">${matches[m]}</i>`);
+        page = page.replace(matches[m], `<i class="highlight_search_res" style="background: hsl(${((i+1)*15)}, 100%, 50%); color: ${colorSwitch}; border: 1px solid hsl(${((i+1)*15)}, 100%, 45%); border-radius: 0.25em; box-shadow: 1px 1px #bababa; padding: 1px;">${matches[m]}</i>`); // padding: 1px; z-index: 14100;
       }
     }
     pages[p].innerHTML = page;
+  
   }
   var search_results_fields = Array.from(cn(document,'highlight_search_res'));
   if(search_results_fields && search_results_fields[0]) search_results_fields[0].scrollIntoView({behavior: "smooth", block: "center", inline: "center"})
