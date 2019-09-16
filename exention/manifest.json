@@ -1,0 +1,14 @@
+{
+    "manifest_version": 2,
+    "name": "Boolean Highlighter",
+    "version": "0.111",
+    "description" : "Highlight with Boolean Search, and use Regular Expressions",
+    "content_scripts": [{
+      "matches": ["https://www.linkedin.com/*"],
+      "js": ["content.js"]
+    }],
+    "permissions": ["storage"],
+    "icons": { "16": "16.png",
+               "48": "48.png",
+              "128": "128.png" }
+  }
