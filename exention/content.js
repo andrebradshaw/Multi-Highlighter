@@ -186,7 +186,7 @@ function highlightKeywords(e){
   }
 }
 
-var parseAsRegexArr = (str)=> /\\|\[|\?|\.\+/.test(str) ? str.split(/\s{0,}\band\b\s{0,}/i).map(el=> el.replace(/\s{0,}\bor\b\s{0,}/ig, '|')).map(el=> new RegExp(el,'i')) : str.split(/\s{0,}\band\b\s{0,}/i).map(el=> el.replace(/\s{0,}\bor\b\s{0,}/ig, '|').replace(/"/g,'\\b').replace(/\(/g,'').replace(/\)/g,'')).map(el=> new RegExp(el,'i'));
+var parseAsRegexArr = (str)=> /\\|\[|\?|\.\+/.test(str) ? str.split(/\s{0,}\band\b\s{0,}/i).map(el=> el.replace(/\s{0,}\bor\b\s{0,}/ig, '|')).map(el=> new RegExp(el,'i')) : str.split(/\s{0,}\band\b\s{0,}/i).map(el=> el.replace(/\s{0,}\bor\b\s{0,}/ig, '|').replace(/"/g,'\\b').replace(/\(/g,'').replace(/\)/g,'')).map(el=> new RegExp(el,'ig'));
 
 
 function clearHighlightClass(){
