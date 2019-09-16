@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "Boolean Highlighter",
+    "name": "xHighlighter",
     "version": "0.111",
-    "description" : "Highlight with Boolean Search, and use Regular Expressions",
+    "description" : "Find and highlight words with boolean search and regular expressions",
     "content_scripts": [{
       "matches": ["<all_urls>"],
       "js": ["content.js"]
