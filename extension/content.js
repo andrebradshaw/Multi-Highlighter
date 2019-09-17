@@ -1,3 +1,12 @@
+/* 
+TODO: 
+  1) add scrollto specified keyword group feature
+    a) acheive this by grouping values into some buttons which a user can click on. <- keywords1 ->, <- keywords3 ->, <- keywords3 ->, 
+  2) add saved search. auto complete, max saved values will be an issue. Need to think about a simple way to give a user the ability to save and retrieve these.
+  3) add case sensitivity, this is off by default
+  4) increase color differential. Need to have more distinction but also allow for a high range at the same time. Should be a simple math function 
+  5) may want to consider adding a wildcard NEAR operator for users who do not want to use RegEx.
+*/
 function initCtrlShiftFListen() {
   var unq = (arr) => arr.filter((e, p, a) => a.indexOf(e) == p);
   document.body.onkeydown = advFind;
@@ -238,4 +247,3 @@ initCtrlShiftFListen();
 
 // Search a web page using boolean and regular expressions
 // Press Enter to execute
-
